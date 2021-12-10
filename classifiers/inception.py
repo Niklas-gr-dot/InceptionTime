@@ -3,6 +3,8 @@ import keras
 import numpy as np
 import time
 
+import tensorflow as tf
+from tensorflow import keras
 from utils.utils import save_logs
 from utils.utils import calculate_metrics
 from utils.utils import save_test_duration
@@ -66,7 +68,6 @@ class Classifier_INCEPTION:
         shortcut_y = keras.layers.Conv1D(filters=int(out_tensor.shape[-1]), kernel_size=1,
                                          padding='same', use_bias=False)(input_tensor)
         shortcut_y = keras.layers.normalization.BatchNormalization()(shortcut_y)
-
         x = keras.layers.Add()([shortcut_y, out_tensor])
         x = keras.layers.Activation('relu')(x)
         return x
@@ -91,7 +92,7 @@ class Classifier_INCEPTION:
 
         model = keras.models.Model(inputs=input_layer, outputs=output_layer)
 
-        model.compile(loss='categorical_crossentropy', optimizer=keras.optimizers.Adam(),
+        model.compile(loss='categorical_crossentropy', optimizer= keras.optimizers.Adam(),
                       metrics=['accuracy'])
 
         reduce_lr = keras.callbacks.ReduceLROnPlateau(monitor='loss', factor=0.5, patience=50,
